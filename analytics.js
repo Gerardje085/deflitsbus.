@@ -1,4 +1,3 @@
-// minimal virtual pageviews
 let lastPath = null;
 function sendVirtual(path, title) {
   if (path === lastPath) return;
@@ -12,7 +11,11 @@ function sendVirtual(path, title) {
   }
 }
 
-// klik op menu-items (veronderstelt data-path attribuut)
+function replacePath(path) {
+  if (window.location.hash) return;
+  history.replaceState({}, '', path);
+}
+
 document.querySelectorAll('nav a[data-path]').forEach(a=>{
   a.addEventListener('click', e=>{
     e.preventDefault();
@@ -21,19 +24,17 @@ document.querySelectorAll('nav a[data-path]').forEach(a=>{
     const sec = document.getElementById(id);
     if (sec) sec.scrollIntoView({behavior:'smooth'});
     sendVirtual(path, a.textContent.trim());
-    history.replaceState({}, '', path); // optioneel: URL netjes houden
+    replacePath(path);
   });
 });
 
-// scroll-detectie via IntersectionObserver
 const obs = new IntersectionObserver((entries)=>{
   entries.forEach(en=>{
     if(en.isIntersecting){
       const id = en.target.id;
       const path = id === 'home' ? '/' : '/' + id;
       sendVirtual(path, id.charAt(0).toUpperCase()+id.slice(1));
-      // optioneel update URL without reloading:
-      history.replaceState({}, '', path);
+      replacePath(path);
     }
   });
 },{ threshold: 0.5 });
