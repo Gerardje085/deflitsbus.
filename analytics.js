@@ -34,7 +34,6 @@ const obs = new IntersectionObserver((entries)=>{
       const id = en.target.id;
       const path = id === 'home' ? '/' : '/' + id;
       sendVirtual(path, id.charAt(0).toUpperCase()+id.slice(1));
-      replacePath(path);
     }
   });
 },{ threshold: 0.5 });

@@ -9,16 +9,18 @@ RewriteRule ^ https://deflitsbus.nl%{REQUEST_URI} [R=301,L,NE]
 RewriteCond %{THE_REQUEST} /index\.(html|php)[\s?] [NC]
 RewriteRule ^(.*/)index\.(html|php)$ /$1 [R=301,L,NE]
 
-# Redirect specifieke oude pagina's naar secties op de nieuwe hoofdpagina
-Redirect 301 /about https://deflitsbus.nl/#about
+# Redirect specifieke pagina's naar secties op de hoofdpagina
+Redirect 301 /about https://deflitsbus.nl/#over
 Redirect 301 /contact https://deflitsbus.nl/#contact
-Redirect 301 /galerij https://deflitsbus.nl/#galerij
+Redirect 301 /galerij https://deflitsbus.nl/#fotos
 Redirect 301 /prijzen https://deflitsbus.nl/#prijzen
+Redirect 301 /waarom-kiezen https://deflitsbus.nl/#waarom-kiezen
+Redirect 301 /waarom https://deflitsbus.nl/#waarom-kiezen
 
-# Voor alle andere niet-bestaande pagina's → 404
+# SPA routing: stuur virtuele routes door naar index.html zodat de client-side router ze kan afhandelen
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^ - [R=404,L]
+RewriteRule ^ index.html [L]
 
 # Allow static assets
 <FilesMatch "\.(css|js|jpg|jpeg|png|webp|svg|ico|woff2?|ttf|otf|json|txt|xml)$">
